@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/biobitworks/rights-and-provenance/blob/main/schemas/licensing-fco-fcg-v0.1.schema.json",
+  "title": "Licensing FCO/FCG prototype (content and occurrence identity separated)",
+  "description": "Schema for an offline evidence graph only. Validation does not confer legal permission or runtime authorization.",
+  "type": "object",
+  "required": [
+    "fcos",
+    "occurrences",
+    "edges"
+  ],
+  "properties": {
+    "fcos": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fco"
+      }
+    },
+    "occurrences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/occurrence"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "fco": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "content"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^fco:sha256:[0-9a-f]{64}$"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "AssetFCO",
+            "LicenseTextFCO",
+            "PermissionFCO",
+            "RightsPolicyFCO",
+            "AuthorityEvidenceFCO"
+          ]
+        },
+        "content": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "occurrence": {
+      "type": "object",
+      "required": [
+        "id",
+        "content_id",
+        "context"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^occ:sha256:[0-9a-f]{64}$"
+        },
+        "content_id": {
+          "type": "string",
+          "pattern": "^fco:sha256:[0-9a-f]{64}$"
+        },
+        "context": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "edge": {
+      "type": "object",
+      "required": [
+        "id",
+        "from",
+        "to",
+        "relation",
+        "evidence_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^edge:sha256:[0-9a-f]{64}$"
+        },
+        "from": {
+          "type": "string",
+          "pattern": "^fco:sha256:[0-9a-f]{64}$"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^fco:sha256:[0-9a-f]{64}$"
+        },
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^fco:sha256:[0-9a-f]{64}$"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "DERIVED_FROM",
+            "GRANTS_SCOPE_FOR",
+            "EVIDENCED_BY",
+            "SUPERSEDES",
+            "GOVERNED_BY"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
